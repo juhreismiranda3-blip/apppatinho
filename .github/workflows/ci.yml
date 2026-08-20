@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    name: Verificação de sintaxe
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Checar sintaxe dos arquivos JS
+        run: |
+          for f in main.js preload.js renderer/goose.js; do
+            echo "node --check $f"
+            node --check "$f"
+          done
+
+      - name: Validar frases.json
+        run: node -e "JSON.parse(require('fs').readFileSync('frases.json','utf8')); console.log('frases.json OK')"
