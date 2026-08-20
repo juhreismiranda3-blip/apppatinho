@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap');
+
+*{ box-sizing: border-box; }
+
+html, body{
+  margin:0; padding:0; width:100%; height:100%;
+  background: transparent;
+  font-family: 'Baloo 2', system-ui, sans-serif;
+  overflow: hidden;
+  user-select: none;
+}
+
+#stage{ position:relative; width:100vw; height:100vh; }
+
+#goose{
+  position:absolute; width:76px; height:93px; left:0; top:0;
+  transition: left 1.1s linear, top 1.1s linear;
+  z-index:5;
+  filter: drop-shadow(0 6px 4px rgba(20,20,20,.28));
+  cursor: pointer;
+  image-rendering: pixelated;
+}
+#goose.flip{ transform: scaleX(-1); }
+#goose svg{ width:100%; height:100%; overflow:visible; shape-rendering:crispEdges; }
+
+.leg{ transform-box: fill-box; transform-origin: 50% 0%; animation: waddle .5s ease-in-out infinite alternate; }
+.leg.b{ animation-delay:.25s; }
+@keyframes waddle{ from{ transform: rotate(-14deg); } to{ transform: rotate(14deg); } }
+#goose.still .leg{ animation-play-state: paused; }
+#goose.still{ animation: idleBob 2.6s ease-in-out infinite; }
+@keyframes idleBob{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-2.5px); } }
+#goose.still.flip{ animation: idleBobFlip 2.6s ease-in-out infinite; }
+@keyframes idleBobFlip{ 0%,100%{ transform: scaleX(-1) translateY(0); } 50%{ transform: scaleX(-1) translateY(-2.5px); } }
+
+/* sem asa/cabeça separada no pixel art — o "honk" vira uma sacudida
+   rápida do corpo inteiro */
+#goose.honking{ animation: honkWiggle .28s ease-in-out infinite; }
+@keyframes honkWiggle{ 0%,100%{ transform: rotate(0deg); } 50%{ transform: rotate(-4deg); } }
+#goose.honking.flip{ animation-name: honkWiggleFlip; }
+@keyframes honkWiggleFlip{ 0%,100%{ transform: scaleX(-1) rotate(0deg); } 50%{ transform: scaleX(-1) rotate(4deg); } }
+
+#bubble{
+  position:absolute; transform: translate(-50%, -100%) rotate(-1.5deg);
+  background: #fffdf7f2; border: 3px solid #24301f; border-radius: 18px 18px 18px 4px;
+  padding: 7px 14px; font-weight:700; font-size:15px; color:#24301f;
+  white-space:nowrap; opacity:0; transition: opacity .18s ease;
+  z-index:6; box-shadow: 3px 4px 0 rgba(36,48,31,.2);
+}
+#bubble::after{
+  content:""; position:absolute; left:22px; bottom:-11px;
+  border-width:11px 4px 0 9px; border-style:solid;
+  border-color: #24301f transparent transparent transparent;
+}
+#bubble::before{
+  content:""; position:absolute; left:25px; bottom:-6.5px;
+  border-width:7px 2px 0 6px; border-style:solid;
+  border-color: #fffdf7f2 transparent transparent transparent; z-index:1;
+}
+#bubble.show{ opacity:1; }

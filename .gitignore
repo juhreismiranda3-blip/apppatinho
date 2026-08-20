@@ -1,0 +1,15 @@
+# dependências instaladas pelo npm — recriadas com `npm install`
+node_modules/
+
+# builds/empacotamentos do Electron (electron-builder, electron-forge etc.)
+dist/
+out/
+build/
+
+# arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# logs
+npm-debug.log*
+*.log

@@ -1,0 +1,14 @@
+{
+  "name": "desktop-goose-diy",
+  "version": "0.1.0",
+  "description": "Seu próprio Desktop Goose — um ganso que vive por cima das suas janelas de verdade.",
+  "main": "main.js",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}

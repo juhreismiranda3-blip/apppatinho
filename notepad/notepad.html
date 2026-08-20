@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Not-epad</title>
+<style>
+  html, body{ margin:0; padding:0; height:100%; background:#fdf6e3; }
+  body{ font-family: 'Courier New', monospace; font-size:14px; color:#3a2f1c; }
+  #bar{
+    background:#f3a53e; color:#3a2405; font-weight:bold; padding:6px 10px;
+    font-family: system-ui, sans-serif; font-size:12px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  #close{ cursor:pointer; border:none; background:transparent; font-weight:bold; font-size:13px; color:#3a2405; }
+  #text{ padding:14px; white-space:pre-wrap; line-height:1.5; }
+  #cursor{ display:inline-block; width:7px; background:#3a2f1c; animation: blink 1s step-end infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+</style>
+</head>
+<body>
+  <div id="bar">
+    <span>🪿 Not-epad.txt</span>
+    <button id="close">✕</button>
+  </div>
+  <div id="text"><span id="typed"></span><span id="cursor">&nbsp;</span></div>
+
+  <script>
+    const full = window.noteData.getText();
+    const typedEl = document.getElementById('typed');
+    let i = 0;
+    function type(){
+      if(i <= full.length){
+        typedEl.textContent = full.slice(0, i);
+        i++;
+        setTimeout(type, 38 + Math.random()*45);
+      }
+    }
+    type();
+    document.getElementById('close').addEventListener('click', ()=> window.close());
+  </script>
+</body>
+</html>
