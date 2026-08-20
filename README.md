@@ -74,6 +74,21 @@ O arquivo sai na pasta `dist/`:
 
 Também dá pra escolher o alvo: `npm run dist:win`, `dist:mac` ou `dist:linux`.
 
+### Ou deixe o GitHub compilar tudo (link de download) 🔗
+
+Tem um workflow ([`.github/workflows/release.yml`](.github/workflows/release.yml))
+que compila os **três** instaladores automaticamente e publica numa Release —
+aí você só manda o link. Pra disparar, crie uma tag de versão:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+Em alguns minutos os instaladores aparecem em **Releases** do repositório
+(`github.com/juhreismiranda3-blip/apppatinho/releases`), prontos pra baixar.
+Não precisa buildar nada na sua máquina.
+
 > **Importante:** você precisa gerar o instalador **no mesmo sistema** de quem
 > vai usar (o `.exe` no Windows, o `.dmg` num Mac). Cruzar sistemas é
 > complicado e foge do simples.
