@@ -1,8 +1,31 @@
-const { app, BrowserWindow, screen, ipcMain, globalShortcut } = require('electron');
+const { app, BrowserWindow, screen, ipcMain, globalShortcut, Tray, Menu, nativeImage } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
 let gooseWindow = null;
+let tray = null;
+let paused = false;
 const noteWindows = new Set();
+
+// Falas e notas ficam num frases.json fácil de editar. Se algo der errado
+// na leitura, caímos num conjunto mínimo pra o ganso nunca ficar mudo.
+function loadPhrases(){
+  const fallback = {
+    honks: ["HONK.", "só passeando pela sua tela"],
+    notes: ["lembrete: você está sendo observado(a) 🪿"]
+  };
+  try {
+    const raw = fs.readFileSync(path.join(__dirname, 'frases.json'), 'utf8');
+    const data = JSON.parse(raw);
+    return {
+      honks: Array.isArray(data.honks) && data.honks.length ? data.honks : fallback.honks,
+      notes: Array.isArray(data.notes) && data.notes.length ? data.notes : fallback.notes
+    };
+  } catch (err) {
+    console.error('Não consegui ler frases.json, usando padrão:', err.message);
+    return fallback;
+  }
+}
 
 function createGooseWindow(){
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -39,11 +62,45 @@ function createGooseWindow(){
   // gooseWindow.webContents.openDevTools({ mode: 'detach' });
 }
 
+// Renderer pede as frases ao subir.
+ipcMain.handle('get-phrases', () => loadPhrases());
+
 // Renderer chama isso a cada frame de hit-test do ganso.
 ipcMain.on('goose-hover', (event, isHovering) => {
   if(!gooseWindow) return;
   gooseWindow.setIgnoreMouseEvents(!isHovering, { forward: true });
 });
+
+function setPaused(value){
+  paused = value;
+  if(gooseWindow) gooseWindow.webContents.send('goose-paused', paused);
+  if(tray) tray.setContextMenu(buildTrayMenu());
+}
+
+function buildTrayMenu(){
+  return Menu.buildFromTemplate([
+    { label: 'Desktop Goose (DIY)', enabled: false },
+    { type: 'separator' },
+    {
+      label: paused ? 'Retomar ganso' : 'Pausar ganso',
+      click: () => setPaused(!paused)
+    },
+    { type: 'separator' },
+    {
+      label: 'Fechar ganso  (Ctrl+Alt+G)',
+      click: () => { noteWindows.forEach(w => w.close()); app.quit(); }
+    }
+  ]);
+}
+
+function createTray(){
+  const icon = nativeImage.createFromPath(path.join(__dirname, 'assets', 'tray.png'));
+  tray = new Tray(icon);
+  tray.setToolTip('Desktop Goose (DIY)');
+  tray.setContextMenu(buildTrayMenu());
+  // clique no ícone alterna pausa (atalho prático)
+  tray.on('click', () => setPaused(!paused));
+}
 
 // Renderer pede pra abrir uma "nota" (janela separada, tipo bloco de notas).
 ipcMain.on('spawn-note', (event, text) => {
@@ -76,6 +133,7 @@ ipcMain.on('spawn-note', (event, text) => {
 
 app.whenReady().then(() => {
   createGooseWindow();
+  createTray();
 
   // Ctrl+Alt+G fecha o ganso e todas as notas — o "Close Goose.bat" da vida.
   globalShortcut.register('CommandOrControl+Alt+G', () => {

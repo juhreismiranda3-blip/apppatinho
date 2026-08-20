@@ -11,7 +11,25 @@ Um ganso que vive por cima das suas janelas de verdade — feito com Electron.
 - Fica "click-through": você clica normalmente nas suas janelas por baixo
   dele. Só quando o mouse está exatamente em cima do ganso é que o clique
   é capturado (pra você poder cutucar ele).
+- Tem um ícone na bandeja do sistema com menu pra **pausar/retomar** o ganso
+  e pra **fechar** ele (clicar no ícone também alterna a pausa).
 - `Ctrl+Alt+G` fecha o ganso e qualquer nota aberta — nosso "Close Goose.bat".
+
+## Editando as falas e notas
+
+As frases ficam no arquivo [`frases.json`](frases.json), separadas em duas
+listas — `honks` (os balões de fala) e `notes` (as janelinhas de nota).
+É só editar o texto, salvar e reabrir o ganso:
+
+```json
+{
+  "honks": ["HONK.", "só passeando pela sua tela"],
+  "notes": ["lembrete: você está sendo observado(a) 🪿"]
+}
+```
+
+Se o arquivo tiver algum erro, o ganso usa um conjunto mínimo de frases
+padrão pra nunca ficar mudo.
 
 ## Como rodar
 
@@ -38,15 +56,17 @@ renderer/
   goose.js           → comportamento: passear, perseguir cursor, honk, notas
 notepad/
   notepad.html       → a janelinha de "nota" com efeito de digitação
+frases.json          → as falas (honks) e notas do ganso, fáceis de editar
+assets/
+  tray.png           → o ícone da bandeja do sistema
 ```
 
 ## Ideias pra evoluir daqui
-- Trocar as falas/notas por um arquivo `frases.json` fácil de editar.
 - Adicionar mais "truques": pegadas de lama (uma janela transparente fina
   no rodapé da tela onde ele deixa marcas), roubar o cursor de verdade
   (precisa de um módulo nativo tipo `robotjs` pra mover o mouse do
   sistema — mais avançado e específico por SO).
-- Ícone na bandeja do sistema (`Tray`) com menu pra pausar/trocar de humor.
+- Mais opções no menu da bandeja (trocar de "humor", esconder o ganso).
 - Empacotar como instalador com `electron-builder`, pra virar um `.exe`
   de verdade como o original.
 

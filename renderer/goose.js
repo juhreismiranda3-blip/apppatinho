@@ -7,21 +7,12 @@
   let facingRight = true;
   let busy = false;
   let hovering = false;
+  let paused = false;
 
-  const honks = [
-    "HONK.", "isso é MEU território agora", "olha o que eu achei…",
-    "você viu meu cursor?", "vim, vi, bagunçei", "psst… corre!",
-    "não confio nesse botão ali", "HONK HONK HONK", "só passeando pela sua tela"
-  ];
-
-  const notes = [
-    "lembrete: você está sendo observado(a) 🪿",
-    "por favor pare de trabalhar e me dê atenção",
-    "isso aqui é uma nota MUITO importante",
-    "HONK (mensagem oficial)",
-    "seu próximo commit vai dar erro. eu vi.",
-    "adotei sua barra de tarefas"
-  ];
+  // Falas/notas vêm do frases.json (via processo principal). Enquanto não
+  // carregam, ficam esses padrões mínimos — trocados assim que o JSON chega.
+  let honks = ["HONK.", "só passeando pela sua tela"];
+  let notes = ["lembrete: você está sendo observado(a) 🪿"];
 
   function clampX(x){ return Math.max(-10, Math.min(window.innerWidth - 76, x)); }
   function clampY(y){ return Math.max(0, Math.min(window.innerHeight - 93, y)); }
@@ -106,7 +97,7 @@
   const WANDER_MAX_S = 18;  // original real: 40
 
   function tick(){
-    if(busy) return;
+    if(busy || paused) return;
     busy = true;
 
     let tx, ty;
@@ -144,7 +135,7 @@
       const pause = chaseRoundsLeft > 0
         ? 60
         : (WANDER_MIN_S + Math.random()*(WANDER_MAX_S-WANDER_MIN_S)) * 1000;
-      setTimeout(()=>{ busy = false; tick(); }, pause);
+      setTimeout(()=>{ busy = false; if(!paused) tick(); }, pause);
     });
   }
 
@@ -166,7 +157,25 @@
     honk();
   });
 
+  // pausa/retoma pela bandeja do sistema
+  window.goose.onPauseChange((isPaused)=>{
+    paused = isPaused;
+    if(paused){
+      goose.classList.add('still');
+      bubble.classList.remove('show');
+      stopFollowing();
+    } else if(!busy){
+      tick();
+    }
+  });
+
   placeGoose(pos.x, pos.y, 0);
   goose.classList.add('still');
-  setTimeout(tick, 1000);
+
+  // carrega as frases e só então começa a passear
+  window.goose.getPhrases().then((p)=>{
+    if(p && Array.isArray(p.honks) && p.honks.length) honks = p.honks;
+    if(p && Array.isArray(p.notes) && p.notes.length) notes = p.notes;
+  }).catch(()=>{ /* mantém os padrões */ })
+    .finally(()=> setTimeout(tick, 1000));
 })();
