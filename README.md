@@ -112,7 +112,16 @@ config.json          → ajustes de comportamento, sons, cores e chances
 assets/
   tray.png           → o ícone da bandeja do sistema
   memes/             → suas fotos e vídeos que o ganso traz pra tela
+tools/
+  goosegen.js        → gera o pixel art do ganso a partir de uma grade
 ```
+
+## Mexendo na arte do ganso
+
+O ganso é pixel art gerado de uma grade em [`tools/goosegen.js`](tools/goosegen.js)
+— cada caractere é um pixel (`W` corpo, `B` bico, `E` olho, `P` bochecha,
+`L` bota…). Edite a `grid`, rode `node tools/goosegen.js` e cole os grupos
+`<g>` gerados dentro do `<svg>` em `renderer/index.html`.
 
 ## Ideias pra evoluir daqui
 - Mais opções no menu da bandeja (trocar de "humor", esconder o ganso).
