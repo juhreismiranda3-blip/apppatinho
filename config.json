@@ -1,5 +1,6 @@
 {
   "silenciarSons": false,
+  "abrirComOSistema": false,
   "podeAtacarMouse": true,
   "atacarSozinho": true,
   "tempoMinPasseioS": 4,

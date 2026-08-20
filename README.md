@@ -29,6 +29,7 @@ Tudo é configurável no [`config.json`](config.json):
 ```json
 {
   "silenciarSons": false,
+  "abrirComOSistema": false,
   "podeAtacarMouse": true,
   "atacarSozinho": true,
   "tempoMinPasseioS": 4,
@@ -48,10 +49,30 @@ Tudo é configurável no [`config.json`](config.json):
 ```
 
 - **silenciarSons** — desliga os efeitos sonoros.
+- **abrirComOSistema** — o honk abre sozinho quando você liga o PC.
 - **tempoMin/MaxPasseioS** — quanto ele fica "de boa" entre uma ação e outra.
-- **pegadas / memes** — liga/desliga esses truques.
+- **pegadas / memes / racao** — liga/desliga esses truques.
 - **chance...** — probabilidade de cada travessura.
 - **cores** — troque a cor do corpo, bico, contorno e pernas do ganso.
+
+## Abrir junto com o computador
+
+Pra o honk subir sozinho quando você liga o PC, tem duas formas:
+
+- **Pela bandeja:** clique com o botão direito no ícone do ganso e marque
+  **"Abrir junto com o PC"**. (No Windows e no macOS.)
+- **Pelo config:** deixe `"abrirComOSistema": true` no `config.json`.
+
+No **Linux** o Electron não gerencia isso automaticamente. Crie um arquivo
+`~/.config/autostart/honk.desktop` com algo assim (ajuste o caminho):
+
+```ini
+[Desktop Entry]
+Type=Application
+Name=honk
+Exec=sh -c "cd /caminho/para/apppatinho && npm start"
+X-GNOME-Autostart-enabled=true
+```
 
 ## Fotos e vídeos (memes)
 

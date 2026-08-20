@@ -32,6 +32,7 @@ function loadPhrases(){
 function loadConfig(){
   const fallback = {
     silenciarSons: false,
+    abrirComOSistema: false,
     podeAtacarMouse: true,
     atacarSozinho: true,
     tempoMinPasseioS: 4,
@@ -56,6 +57,27 @@ function loadConfig(){
     console.error('Não consegui ler config.json, usando padrão:', err.message);
     return fallback;
   }
+}
+
+// Salva uma alteração de volta no config.json (ex.: ligar/desligar o
+// "abrir com o sistema" pela bandeja) preservando o resto do arquivo.
+function saveConfig(patch){
+  const file = path.join(__dirname, 'config.json');
+  let data = {};
+  try { data = JSON.parse(fs.readFileSync(file, 'utf8')); } catch { data = loadConfig(); }
+  Object.assign(data, patch);
+  try { fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n'); }
+  catch (err) { console.error('Não consegui salvar config.json:', err.message); }
+}
+
+// Faz o honk abrir junto com o sistema (Windows/macOS via API do Electron).
+// No Linux o Electron não gerencia isso — deixamos um aviso.
+function setAutostart(enabled){
+  if (process.platform === 'linux') {
+    console.warn('Abrir com o sistema no Linux precisa de um arquivo .desktop em ~/.config/autostart (veja o README).');
+    return;
+  }
+  app.setLoginItemSettings({ openAtLogin: enabled, openAsHidden: true });
 }
 
 // Sorteia uma foto OU vídeo da pasta assets/memes (se houver algum).
@@ -198,6 +220,16 @@ function buildTrayMenu(){
       label: paused ? 'Retomar ganso' : 'Pausar ganso',
       click: () => setPaused(!paused)
     },
+    {
+      label: 'Abrir junto com o PC',
+      type: 'checkbox',
+      checked: loadConfig().abrirComOSistema === true,
+      enabled: process.platform !== 'linux',
+      click: (item) => {
+        setAutostart(item.checked);
+        saveConfig({ abrirComOSistema: item.checked });
+      }
+    },
     { type: 'separator' },
     {
       label: 'Fechar ganso  (Ctrl+Alt+G)',
@@ -247,6 +279,9 @@ ipcMain.on('spawn-note', (event, text) => {
 app.whenReady().then(() => {
   createGooseWindow();
   createTray();
+
+  // aplica a preferência de "abrir com o sistema" salva no config.json
+  setAutostart(loadConfig().abrirComOSistema === true);
 
   // Ctrl+Alt+G fecha o ganso e todas as notas — o "Close Goose.bat" da vida.
   globalShortcut.register('CommandOrControl+Alt+G', () => {
