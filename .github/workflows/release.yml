@@ -6,6 +6,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versão da release (ex.: v0.1.0)'
+        required: true
+        default: 'v0.1.0'
 
 permissions:
   contents: write   # necessário pra criar a Release e anexar os arquivos
@@ -52,13 +57,14 @@ jobs:
             dist/*.AppImage
           if-no-files-found: ignore
 
-      - name: Publicar na Release (só quando é uma tag)
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Publicar na Release (tag ou disparo manual)
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_VERSION: ${{ github.event.inputs.version }}
         run: |
-          TAG="${GITHUB_REF_NAME}"
+          TAG="${INPUT_VERSION:-$GITHUB_REF_NAME}"
           # cria a Release uma vez (se já existir, tudo bem)
           gh release create "$TAG" --title "honk $TAG" \
             --notes "Instaladores do honk $TAG. Baixe o do seu sistema e abra. App não assinado: na primeira vez confirme \"Executar mesmo assim\" (Windows) ou botão direito → Abrir (macOS)." \
