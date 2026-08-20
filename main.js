@@ -38,11 +38,13 @@ function loadConfig(){
     tempoMaxPasseioS: 10,
     pegadas: true,
     memes: true,
+    racao: true,
     roubarMouse: true,
     chanceHonk: 0.40,
     chanceNota: 0.18,
     chanceMeme: 0.15,
     chanceRoubo: 0.20,
+    chanceRacao: 0.15,
     chanceCacaSozinho: 0.35,
     cores: { corpo: '#ffffff', bico: '#ffa500', contorno: '#161616', pernas: '#2f7ec7' }
   };
@@ -190,7 +192,7 @@ function setPaused(value){
 
 function buildTrayMenu(){
   return Menu.buildFromTemplate([
-    { label: 'Desktop Goose (DIY)', enabled: false },
+    { label: 'honk 🪿', enabled: false },
     { type: 'separator' },
     {
       label: paused ? 'Retomar ganso' : 'Pausar ganso',
@@ -207,7 +209,7 @@ function buildTrayMenu(){
 function createTray(){
   const icon = nativeImage.createFromPath(path.join(__dirname, 'assets', 'tray.png'));
   tray = new Tray(icon);
-  tray.setToolTip('Desktop Goose (DIY)');
+  tray.setToolTip('honk 🪿');
   tray.setContextMenu(buildTrayMenu());
   // clique no ícone alterna pausa (atalho prático)
   tray.on('click', () => setPaused(!paused));

@@ -1,7 +1,7 @@
 {
-  "name": "desktop-goose-diy",
+  "name": "honk",
   "version": "0.1.0",
-  "description": "Seu próprio Desktop Goose — um ganso que vive por cima das suas janelas de verdade.",
+  "description": "honk — um ganso fofo que vive por cima das suas janelas de verdade.",
   "main": "main.js",
   "author": "",
   "license": "MIT",

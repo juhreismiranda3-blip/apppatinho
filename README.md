@@ -1,6 +1,7 @@
-# Desktop Goose (DIY)
+# honk 🪿
 
-Um ganso que vive por cima das suas janelas de verdade — feito com Electron.
+Um ganso fofo que vive por cima das suas janelas de verdade — feito com
+Electron. (Antes chamado "Desktop Goose (DIY)".)
 
 ## O que ele já faz
 - Passeia pela tela inteira, por cima de qualquer programa aberto.
@@ -14,6 +15,7 @@ Um ganso que vive por cima das suas janelas de verdade — feito com Electron.
 - Tem um ícone na bandeja do sistema com menu pra **pausar/retomar** o ganso
   e pra **fechar** ele (clicar no ícone também alterna a pausa).
 - Deixa **pegadas de lama** 🐾 no rastro por onde passa (com som de "squish").
+- Faz **chover ração** 🍚 — bolinhas caem do topo da tela e se espalham.
 - Toca **sons** de HONK e de bicada (sintetizados, sem arquivos externos).
 - Traz **memes** — fotos e vídeos — que aparecem na tela de vez em quando
   (você coloca os seus em `assets/memes/`).
@@ -28,15 +30,19 @@ Tudo é configurável no [`config.json`](config.json):
 {
   "silenciarSons": false,
   "podeAtacarMouse": true,
-  "tempoMinPasseioS": 8,
-  "tempoMaxPasseioS": 18,
+  "atacarSozinho": true,
+  "tempoMinPasseioS": 4,
+  "tempoMaxPasseioS": 10,
   "pegadas": true,
   "memes": true,
-  "roubarMouse": false,
-  "chanceHonk": 0.30,
-  "chanceNota": 0.12,
-  "chanceMeme": 0.10,
-  "chanceRoubo": 0.15,
+  "racao": true,
+  "roubarMouse": true,
+  "chanceHonk": 0.40,
+  "chanceNota": 0.18,
+  "chanceMeme": 0.15,
+  "chanceRoubo": 0.20,
+  "chanceRacao": 0.15,
+  "chanceCacaSozinho": 0.35,
   "cores": { "corpo": "#ffffff", "bico": "#ffa500", "contorno": "#161616", "pernas": "#2f7ec7" }
 }
 ```
@@ -87,7 +93,7 @@ padrão pra nunca ficar mudo.
 Pré-requisito: [Node.js](https://nodejs.org) instalado (versão 18+).
 
 ```bash
-cd desktop-goose-app
+cd apppatinho
 npm install
 npm start
 ```

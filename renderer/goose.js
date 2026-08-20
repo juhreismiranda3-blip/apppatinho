@@ -17,8 +17,8 @@
   let cfg = {
     silenciarSons: false, podeAtacarMouse: true, atacarSozinho: true,
     tempoMinPasseioS: 4, tempoMaxPasseioS: 10,
-    pegadas: true, memes: true, roubarMouse: true,
-    chanceHonk: 0.40, chanceNota: 0.18, chanceMeme: 0.15, chanceRoubo: 0.20, chanceCacaSozinho: 0.35,
+    pegadas: true, memes: true, racao: true, roubarMouse: true,
+    chanceHonk: 0.40, chanceNota: 0.18, chanceMeme: 0.15, chanceRoubo: 0.20, chanceRacao: 0.15, chanceCacaSozinho: 0.35,
     cores: { corpo:"#ffffff", bico:"#ffa500", contorno:"#161616", pernas:"#2f7ec7" }
   };
 
@@ -125,6 +125,37 @@
     setTimeout(()=> window.goose.spawnMeme(), 700);
   }
 
+  // chove ração: várias bolinhas caem do topo, quicam no chão e somem.
+  const rain = document.getElementById('rain');
+  function rainKibble(){
+    if(!cfg.racao || !rain) return;
+    say("RAÇÃO!! 🍚", 1400);
+    honkSound();
+    const total = 22 + Math.floor(Math.random()*14);
+    for(let i=0;i<total;i++){
+      const k = document.createElement('div');
+      k.className = 'kibble';
+      const x = Math.random()*window.innerWidth;
+      const fall = window.innerHeight - 8 - Math.random()*40; // onde "assenta"
+      const dur = 1.1 + Math.random()*1.1;
+      k.style.left = x + 'px';
+      k.style.setProperty('--fall', fall + 'px');
+      k.style.setProperty('--dur', dur + 's');
+      k.style.setProperty('--spin', (Math.random()*360-180) + 'deg');
+      k.style.animationDelay = (Math.random()*0.6) + 's';
+      rain.appendChild(k);
+      // ao terminar a queda, deixa quietinho no chão e depois remove
+      k.addEventListener('animationend', function onFall(){
+        k.removeEventListener('animationend', onFall);
+        k.style.top = fall + 'px';
+        k.style.transform = 'none';
+        k.classList.add('landed');
+        if(!cfg.silenciarSons && Math.random()<0.3) mudSound();
+        setTimeout(()=> k.remove(), 2400);
+      }, { once:false });
+    }
+  }
+
   function walkTo(x, y, speed, cb){
     x = clampX(x); y = clampY(y);
     const dist = Math.hypot(x - pos.x, y - pos.y);
@@ -197,7 +228,9 @@
           writeNote();
         } else if(r < cfg.chanceNota + cfg.chanceMeme){
           bringMeme();
-        } else if(r < cfg.chanceNota + cfg.chanceMeme + cfg.chanceHonk){
+        } else if(r < cfg.chanceNota + cfg.chanceMeme + cfg.chanceRacao){
+          rainKibble();
+        } else if(r < cfg.chanceNota + cfg.chanceMeme + cfg.chanceRacao + cfg.chanceHonk){
           honk();
         }
       }

@@ -6,11 +6,13 @@
   "tempoMaxPasseioS": 10,
   "pegadas": true,
   "memes": true,
+  "racao": true,
   "roubarMouse": true,
   "chanceHonk": 0.40,
   "chanceNota": 0.18,
   "chanceMeme": 0.15,
   "chanceRoubo": 0.20,
+  "chanceRacao": 0.15,
   "chanceCacaSozinho": 0.35,
   "cores": {
     "corpo": "#ffffff",

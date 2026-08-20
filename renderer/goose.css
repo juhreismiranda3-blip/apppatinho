@@ -23,6 +23,23 @@ html, body{
 }
 @keyframes mudFade{ 0%{ opacity:.5; } 70%{ opacity:.42; } 100%{ opacity:0; } }
 
+/* chuva de ração: bolinhas caindo do topo da tela */
+#rain{ position:absolute; inset:0; z-index:6; pointer-events:none; overflow:hidden; }
+.kibble{
+  position:absolute; top:-14px; width:7px; height:9px;
+  background:radial-gradient(circle at 32% 30%, #b5772f, #7a4a18 70%);
+  border-radius:48% 52% 46% 54%; box-shadow:0 1px 0 rgba(0,0,0,.25);
+  animation: kibbleFall var(--dur,1.6s) cubic-bezier(.45,0,.75,1) forwards;
+}
+@keyframes kibbleFall{
+  0%   { transform:translateY(0) rotate(0); opacity:0; }
+  8%   { opacity:1; }
+  100% { transform:translateY(var(--fall,100vh)) rotate(var(--spin,180deg)); opacity:1; }
+}
+/* montinho que fica no chão por um tempo antes de sumir */
+.kibble.landed{ animation: kibbleRest 2.4s ease-out forwards; }
+@keyframes kibbleRest{ 0%{opacity:1;} 75%{opacity:1;} 100%{opacity:0;} }
+
 #goose{
   position:absolute; width:80px; height:84px; left:0; top:0;
   transition: left 1.1s linear, top 1.1s linear;
