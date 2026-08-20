@@ -1,6 +1,6 @@
 {
   "name": "honk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "honk — um ganso fofo que vive por cima das suas janelas de verdade.",
   "main": "main.js",
   "author": "",
@@ -35,8 +35,15 @@
       { "from": "assets/memes", "to": "memes" }
     ],
     "win": {
-      "target": "nsis",
+      "target": [
+        "portable",
+        "zip",
+        "nsis"
+      ],
       "icon": "assets/icon.png"
+    },
+    "portable": {
+      "artifactName": "honk-portatil-${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
