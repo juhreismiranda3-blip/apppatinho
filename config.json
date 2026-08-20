@@ -1,0 +1,19 @@
+{
+  "silenciarSons": false,
+  "podeAtacarMouse": true,
+  "tempoMinPasseioS": 8,
+  "tempoMaxPasseioS": 18,
+  "pegadas": true,
+  "memes": true,
+  "roubarMouse": false,
+  "chanceHonk": 0.30,
+  "chanceNota": 0.12,
+  "chanceMeme": 0.10,
+  "chanceRoubo": 0.15,
+  "cores": {
+    "corpo": "#ffffff",
+    "bico": "#ffa500",
+    "contorno": "#161616",
+    "pernas": "#2f7ec7"
+  }
+}

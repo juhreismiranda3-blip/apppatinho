@@ -24,5 +24,7 @@ jobs:
             node --check "$f"
           done
 
-      - name: Validar frases.json
-        run: node -e "JSON.parse(require('fs').readFileSync('frases.json','utf8')); console.log('frases.json OK')"
+      - name: Validar JSONs
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('frases.json','utf8')); console.log('frases.json OK')"
+          node -e "JSON.parse(require('fs').readFileSync('config.json','utf8')); console.log('config.json OK')"
