@@ -15,10 +15,10 @@
   let honks = ["HONK.", "só passeando pela sua tela"];
   let notes = ["lembrete: você está sendo observado(a) 🪿"];
   let cfg = {
-    silenciarSons: false, podeAtacarMouse: true,
-    tempoMinPasseioS: 8, tempoMaxPasseioS: 18,
-    pegadas: true, memes: true, roubarMouse: false,
-    chanceHonk: 0.30, chanceNota: 0.12, chanceMeme: 0.10, chanceRoubo: 0.15,
+    silenciarSons: false, podeAtacarMouse: true, atacarSozinho: true,
+    tempoMinPasseioS: 4, tempoMaxPasseioS: 10,
+    pegadas: true, memes: true, roubarMouse: true,
+    chanceHonk: 0.40, chanceNota: 0.18, chanceMeme: 0.15, chanceRoubo: 0.20, chanceCacaSozinho: 0.35,
     cores: { corpo:"#ffffff", bico:"#ffa500", contorno:"#161616", pernas:"#2f7ec7" }
   };
 
@@ -166,8 +166,12 @@
       tx = mouse.x - 38 + (Math.random()*16-8);
       ty = mouse.y - 46 + (Math.random()*16-8);
     } else {
+      // caça se o cursor estiver perto OU, no modo autônomo, por conta
+      // própria de vez em quando (mesmo com o mouse parado) — o ganso
+      // decide sozinho fazer bagunça.
       const isClose = distToMouse() < 420;
-      const startChase = isClose && Math.random() < 0.3;
+      const startChase = (isClose && Math.random() < 0.3)
+        || (cfg.atacarSozinho && Math.random() < cfg.chanceCacaSozinho);
       if(startChase){
         chaseRoundsLeft = 4 + Math.floor(Math.random()*3); // 4-6 rodadas
         say("caçando o cursor! 🏃", 900);

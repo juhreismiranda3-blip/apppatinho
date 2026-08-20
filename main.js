@@ -33,15 +33,17 @@ function loadConfig(){
   const fallback = {
     silenciarSons: false,
     podeAtacarMouse: true,
-    tempoMinPasseioS: 8,
-    tempoMaxPasseioS: 18,
+    atacarSozinho: true,
+    tempoMinPasseioS: 4,
+    tempoMaxPasseioS: 10,
     pegadas: true,
     memes: true,
-    roubarMouse: false,
-    chanceHonk: 0.30,
-    chanceNota: 0.12,
-    chanceMeme: 0.10,
-    chanceRoubo: 0.15,
+    roubarMouse: true,
+    chanceHonk: 0.40,
+    chanceNota: 0.18,
+    chanceMeme: 0.15,
+    chanceRoubo: 0.20,
+    chanceCacaSozinho: 0.35,
     cores: { corpo: '#ffffff', bico: '#ffa500', contorno: '#161616', pernas: '#2f7ec7' }
   };
   try {
