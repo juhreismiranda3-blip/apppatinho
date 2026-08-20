@@ -1,0 +1,76 @@
+name: Gerar instaladores (release)
+
+# Dispara quando você cria uma tag de versão (ex.: v0.1.0) ou manualmente.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versão da release (ex.: v0.1.0)'
+        required: true
+        default: 'v0.1.0'
+
+permissions:
+  contents: write   # necessário pra criar a Release e anexar os arquivos
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            nome: Windows
+          - os: macos-latest
+            nome: macOS
+          - os: ubuntu-latest
+            nome: Linux
+    runs-on: ${{ matrix.os }}
+    name: Compilar (${{ matrix.nome }})
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm install --omit=optional
+
+      - name: Gerar o instalador
+        run: npx electron-builder --publish never
+        env:
+          # app não é assinado — não tentar descobrir certificado no macOS
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Guardar os arquivos como artefato do build
+        uses: actions/upload-artifact@v4
+        with:
+          name: honk-${{ matrix.nome }}
+          path: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.AppImage
+          if-no-files-found: ignore
+
+      - name: Publicar na Release (tag ou disparo manual)
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+        run: |
+          TAG="${INPUT_VERSION:-$GITHUB_REF_NAME}"
+          # cria a Release uma vez (se já existir, tudo bem)
+          gh release create "$TAG" --title "honk $TAG" \
+            --notes "Instaladores do honk $TAG. Baixe o do seu sistema e abra. App não assinado: na primeira vez confirme \"Executar mesmo assim\" (Windows) ou botão direito → Abrir (macOS)." \
+            || true
+          shopt -s nullglob
+          arquivos=(dist/*.exe dist/*.dmg dist/*.AppImage)
+          if [ ${#arquivos[@]} -gt 0 ]; then
+            gh release upload "$TAG" "${arquivos[@]}" --clobber
+          fi

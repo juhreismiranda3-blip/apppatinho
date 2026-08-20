@@ -1,0 +1,24 @@
+{
+  "silenciarSons": false,
+  "abrirComOSistema": false,
+  "podeAtacarMouse": true,
+  "atacarSozinho": true,
+  "tempoMinPasseioS": 4,
+  "tempoMaxPasseioS": 10,
+  "pegadas": true,
+  "memes": true,
+  "racao": true,
+  "roubarMouse": true,
+  "chanceHonk": 0.40,
+  "chanceNota": 0.18,
+  "chanceMeme": 0.15,
+  "chanceRoubo": 0.20,
+  "chanceRacao": 0.15,
+  "chanceCacaSozinho": 0.35,
+  "cores": {
+    "corpo": "#ffffff",
+    "bico": "#ffa500",
+    "contorno": "#161616",
+    "pernas": "#2f7ec7"
+  }
+}
