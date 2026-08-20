@@ -22,8 +22,8 @@
     cores: { corpo:"#ffffff", bico:"#ffa500", contorno:"#161616", pernas:"#2f7ec7" }
   };
 
-  function clampX(x){ return Math.max(-10, Math.min(window.innerWidth - 76, x)); }
-  function clampY(y){ return Math.max(0, Math.min(window.innerHeight - 93, y)); }
+  function clampX(x){ return Math.max(-10, Math.min(window.innerWidth - 80, x)); }
+  function clampY(y){ return Math.max(0, Math.min(window.innerHeight - 84, y)); }
 
   function placeGoose(x, y, duration){
     goose.style.transition = `left ${duration}s linear, top ${duration}s linear`;
@@ -151,7 +151,7 @@
   }
 
   function distToMouse(){
-    return Math.hypot(mouse.x - (pos.x+38), mouse.y - (pos.y+46));
+    return Math.hypot(mouse.x - (pos.x+40), mouse.y - (pos.y+42));
   }
 
   let chaseRoundsLeft = 0;
@@ -163,8 +163,8 @@
     let tx, ty;
     if(chaseRoundsLeft > 0){
       chaseRoundsLeft--;
-      tx = mouse.x - 38 + (Math.random()*16-8);
-      ty = mouse.y - 46 + (Math.random()*16-8);
+      tx = mouse.x - 40 + (Math.random()*16-8);
+      ty = mouse.y - 42 + (Math.random()*16-8);
     } else {
       // caça se o cursor estiver perto OU, no modo autônomo, por conta
       // própria de vez em quando (mesmo com o mouse parado) — o ganso
@@ -175,7 +175,7 @@
       if(startChase){
         chaseRoundsLeft = 4 + Math.floor(Math.random()*3); // 4-6 rodadas
         say("caçando o cursor! 🏃", 900);
-        tx = mouse.x - 38; ty = mouse.y - 46;
+        tx = mouse.x - 40; ty = mouse.y - 42;
         // chance de tentar ROUBAR o cursor (só age se robotjs + config ligados)
         if(cfg.roubarMouse && Math.random() < cfg.chanceRoubo){
           window.goose.stealMouse();
