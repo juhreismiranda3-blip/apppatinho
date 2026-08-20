@@ -55,6 +55,35 @@ Tudo é configurável no [`config.json`](config.json):
 - **chance...** — probabilidade de cada travessura.
 - **cores** — troque a cor do corpo, bico, contorno e pernas do ganso.
 
+## Mandar pra alguém baixar e abrir (instalador)
+
+Pra outra pessoa usar o honk **sem terminal e sem Node**, é só gerar um
+instalador com o [electron-builder](https://www.electron.build/) e enviar o
+arquivo pronto (por WhatsApp, Google Drive, etc.).
+
+```bash
+npm install          # inclui o electron-builder
+npm run dist         # gera o instalador para o SEU sistema
+```
+
+O arquivo sai na pasta `dist/`:
+
+- **Windows** → `dist/honk Setup 0.1.0.exe` (a pessoa clica e instala)
+- **macOS** → `dist/honk-0.1.0.dmg` (arrasta pra Aplicativos)
+- **Linux** → `dist/honk-0.1.0.AppImage` (dá permissão de executar e abre)
+
+Também dá pra escolher o alvo: `npm run dist:win`, `dist:mac` ou `dist:linux`.
+
+> **Importante:** você precisa gerar o instalador **no mesmo sistema** de quem
+> vai usar (o `.exe` no Windows, o `.dmg` num Mac). Cruzar sistemas é
+> complicado e foge do simples.
+
+> **Aviso de "editor desconhecido":** como o app não é assinado digitalmente,
+> o Windows (SmartScreen) e o macOS (Gatekeeper) mostram um alerta na primeira
+> vez. É só mandar **"Executar mesmo assim"** / clicar com o botão direito →
+> **Abrir**. Pra tirar o alerta de vez seria preciso um certificado de
+> assinatura (pago), o que não é necessário pra uso entre amigos.
+
 ## Abrir junto com o computador
 
 Pra o honk subir sozinho quando você liga o PC, tem duas formas:
