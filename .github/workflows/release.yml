@@ -41,6 +41,12 @@ jobs:
       - name: Instalar dependências
         run: npm install --omit=optional
 
+      # o alvo .dmg do macOS precisa do dmg-license (é opcional e só existe
+      # no macOS, então instalamos à parte aqui)
+      - name: (macOS) instalar dmg-license
+        if: runner.os == 'macOS'
+        run: npm install dmg-license
+
       - name: Gerar o instalador
         run: npx electron-builder --publish never
         env:
