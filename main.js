@@ -7,6 +7,11 @@ let tray = null;
 let paused = false;
 const noteWindows = new Set();
 
+// Janelas transparentes/sem moldura costumam aparecer em branco (ou nem
+// aparecer) no Windows por causa da aceleração de hardware. Desligar resolve
+// e não pesa nada pra um app tão leve.
+app.disableHardwareAcceleration();
+
 // Falas e notas ficam num frases.json fácil de editar. Se algo der errado
 // na leitura, caímos num conjunto mínimo pra o ganso nunca ficar mudo.
 function loadPhrases(){
@@ -129,6 +134,7 @@ function createGooseWindow(){
     width, height,
     x: 0, y: 0,
     transparent: true,
+    backgroundColor: '#00000000', // fundo 100% transparente (ajuda no Windows)
     frame: false,
     alwaysOnTop: true,
     skipTaskbar: true,
